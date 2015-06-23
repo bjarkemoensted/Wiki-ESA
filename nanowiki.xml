@@ -1,0 +1,29 @@
+﻿<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="pt">
+<page>
+    <title>Ayn Rand</title>
+      <text>	
+Blablabla idiot more words blablabla
+</text>
+  </page>
+    <page>
+    <title>Autism</title>
+      <text>
+Autism blablabla math pizza
+</text>
+  </page>
+  <page>
+    <title>Horse</title>
+      <text>
+words blablabla something mammal hooves etc
+      </text>
+   </page>
+
+<page>
+    <title>No bullshit</title>
+      <text>
+words something mammal hooves [[horse]] etc
+      </text>
+   </page>
+
+</mediawiki>
+

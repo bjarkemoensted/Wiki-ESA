@@ -154,3 +154,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+supersecretstuff.*
+temp/*
+matrix/*
