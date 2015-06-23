@@ -23,6 +23,8 @@ import glob
 import shared
 import sys
 
+DEFAULT_FILENAME = 'medium_wiki.xml'
+
 def canonize_title(title):
   # remove leading whitespace and underscores
     title = title.strip(' _')
@@ -139,7 +141,6 @@ class WikiHandler(SAX.ContentHandler):
         
         #Ignore everything else if article redirects
         if self.redirect:
-            #FIXME get rid of this properly!!!
             self.flush_input_buffer()
             return None
             global redirects
@@ -236,7 +237,12 @@ class WikiHandler(SAX.ContentHandler):
         self.flush_output_buffer()
         return None
     
-def main(file_to_parse = 'medium_wiki.xml'):
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        file_to_parse = sys.argv[1]
+    else:
+        file_to_parse = DEFAULT_FILENAME
+    
     #Create and configure content handler
     test = WikiHandler()
     test.verbose = True
@@ -258,9 +264,3 @@ def main(file_to_parse = 'medium_wiki.xml'):
             log("Job's done. Push failed.")
     
     logfile.close()
-    
-if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        main(sys.argv[1])
-    else:
-        main()
