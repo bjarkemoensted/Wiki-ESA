@@ -145,10 +145,7 @@ class SemanticAnalyser(object):
     '''Analyser class using Explicit Semantic Analysis (ESA) to process 
     text fragments. It can compute semantic (pseudo) distance and similarity,
     as well'''
-    def __init__(self, matrix_filename = 'matrix.mtx', display_concepts = 20):
-        #Number of top concepts to display
-        self.display_concepts = display_concepts
-        
+    def __init__(self, matrix_filename = 'matrix.mtx'):        
         #Hashes for word and concept indices
         with open(matrix_dir+'word2index.ind', 'r') as f:
             self.word2index = shared.load(f)
@@ -201,13 +198,13 @@ class SemanticAnalyser(object):
         #Done. Return row vector as a 1x#concepts CSR matrix
         return result
         
-    def interpret_text(self, text):
+    def interpret_text(self, text, display_concepts = 10):
         '''Attempts to guess the core concepts of the given text fragment'''
         #Compute the interpretation vector for the text fragment
         vec = self.interpretation_vector(text)
         
         #Magic, don't touch
-        top_n = vec.data.argsort()[:len(vec.data)-1-self.display_concepts:-1]
+        top_n = vec.data.argsort()[:len(vec.data)-1-display_concepts:-1]
         
         #List top scoring concepts and their TD-IDF
         concepts = [self.index2concept[vec.indices[i]] for i in top_n]
@@ -227,14 +224,7 @@ class SemanticAnalyser(object):
         print "Based on your input, the most probable topics of your text are:"
         print topics[:self.display_concepts]
 
-    def compare_texts(self, text1, text2):
-        '''Determines cosine similarity between input texts.
-        Returns float in [0,1]'''
-        
-        #Determine intepretation vectors
-        v1 = self.interpretation_vector(text1)
-        v2 = self.interpretation_vector(text2)
-        
+    def scalar(self, v1, v2):
         #Compute their inner product and make sure it's a scalar
         dot = v1.dot(v2.transpose())
         assert dot.shape == (1,1)
@@ -247,9 +237,21 @@ class SemanticAnalyser(object):
         #Normalize and return
         sim = scal/(norm(v1.data)*norm(v2.data))
         return sim
+
+    def cosine_similarity(self, text1, text2):
+        '''Determines cosine similarity between input texts.
+        Returns float in [0,1]'''
+        
+        #Determine intepretation vectors
+        v1 = self.interpretation_vector(text1)
+        v2 = self.interpretation_vector(text2)
+        
+        #Compute the normalized dot product and return
+        return self.scalar(v1, v2)
+        
         
     def cosine_distance(self, text1, text2):
-        return 1-self.compare_texts(text1, text2)
+        return 1-self.cosine_similarity(text1, text2)
 
 if __name__ == '__main__':
     th = TweetHarvester(verbose=True, max_tweets=10)
